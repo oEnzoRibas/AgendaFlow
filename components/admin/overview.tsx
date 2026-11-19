@@ -9,6 +9,10 @@ import { dateLabel, dayIn, labels, money, shiftDay, timeLabel } from "@/lib/sche
 import { Empty } from "../shared";
 import { Button } from "../ui/button";
 
+/**
+ * Deriva as métricas a partir do workspace. A receita soma valores históricos de reservas não canceladas.
+ * @param props - Dados disponíveis e prefixo de navegação do modo corrente.
+ */
 export function Overview({ data, base }: { data: Workspace; base: string }) {
   const [period, setPeriod] = useState(7);
   const zone = data.business.timezone;

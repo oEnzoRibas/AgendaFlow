@@ -212,3 +212,10 @@ input[type=checkbox] { width: 17px; height: 17px; accent-color: var(--primary); 
   .booking-steps li { font-size: .73rem; gap: 5px; align-items: flex-start; flex-direction: column; }
   .time-heading { flex-wrap: wrap; }
 }
+body { min-height: 100dvh; display: flex; flex-direction: column; }
+.app-content { flex: 1; }
+.site-footer-compact { padding-block: 13px; }
+.site-footer-compact .wrap { justify-content: center; }
+.developer-credit { font-size: .85rem; }
+.developer-credit a { color: var(--primary-dark); font-weight: 750; text-decoration: underline; text-underline-offset: .2em; }
+.developer-credit a:hover { color: var(--primary); text-decoration-thickness: .13em; }

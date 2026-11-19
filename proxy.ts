@@ -2,6 +2,12 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { config as supabaseConfig } from "@/lib/supabase/config";
 
+/**
+ * Refresca a sessão Supabase nas rotas de login e administração.
+ * Propaga cookies para o render atual e para o navegador. A autorização do painel é verificada na rota e no banco.
+ * @param request - Requisição que corresponde ao matcher.
+ * @returns Resposta com cookies atualizados quando necessário e cache privado desabilitado.
+ */
 export async function proxy(request: NextRequest) {
   const settings = supabaseConfig();
   let response = NextResponse.next({ request });

@@ -6,6 +6,10 @@ import { cookies } from "next/headers";
 import type { Business, Workspace } from "../model";
 import { businessSlug, config } from "./config";
 
+/**
+ * Cria o cliente sem persistência de sessão utilizado pelo catálogo e pela reserva anônima.
+ * @returns Cliente com chave publicável, ou null quando a integração está incompleta.
+ */
 export function publicClient() {
   const settings = config();
   return settings ? createClient<Database>(settings.url, settings.key, {
@@ -14,6 +18,11 @@ export function publicClient() {
   }) : null;
 }
 
+/**
+ * Acopla o Supabase SSR ao cookie store da requisição.
+ * O proxy atualiza cookies quando o contexto da renderização não permite gravá-los.
+ * @returns Cliente da sessão, ou null sem configuração.
+ */
 export async function sessionClient() {
   const settings = config();
   if (!settings) return null;
@@ -29,6 +38,11 @@ export async function sessionClient() {
   });
 }
 
+/**
+ * Valida as claims e resolve o estabelecimento do slug corrente sob RLS.
+ * @returns Cliente, estado da sessão e negócio autorizado, quando houver.
+ * @throws Erro de infraestrutura quando a leitura do negócio falha.
+ */
 export async function adminContext() {
   const db = await sessionClient();
   if (!db) return { db: null, business: null, signedIn: false };
@@ -56,6 +70,13 @@ async function rows<T>(db: Session, business: Business, table: Exclude<keyof Dat
   }
 }
 
+/**
+ * Reúne as tabelas do painel e normaliza campos de hora para os formulários.
+ * @param db - Cliente Supabase com sessão verificada.
+ * @param business - Estabelecimento retornado pelo contexto administrativo.
+ * @returns Workspace completo com leituras paginadas em lotes no servidor.
+ * @throws Erro de infraestrutura se uma leitura não puder ser completada.
+ */
 export async function getWorkspace(db: Session, business: Business): Promise<Workspace> {
   const [services, professionals, clients, appointments, professional_services, availability_rules, blocked_periods] = await Promise.all([
     rows<Workspace["services"][number]>(db, business, "services", "id, name, description, duration_minutes, price_cents, active"),

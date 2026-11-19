@@ -5,6 +5,13 @@ import { listSlots } from "@/app/actions";
 import { getSlots } from "@/lib/schedule";
 import type { Result, Slot, SlotQuery, Workspace } from "@/lib/model";
 
+/**
+ * Resolve vagas localmente ou pela ação do servidor, ignorando respostas de consultas obsoletas.
+ * @param query - Consulta, ou null enquanto serviço, profissional e data não estiverem prontos.
+ * @param demo - Workspace sintético quando o fluxo usa simulação local.
+ * @param administrative - Solicita o caminho de remarcação com sessão.
+ * @returns Vagas, estado de carregamento, erro exibível e função de nova consulta.
+ */
 export function useSlots(query: SlotQuery | null, demo: Workspace | null, administrative = false) {
   const key = query ? JSON.stringify(query) : "";
   const [answer, setAnswer] = useState<{ key: string; result: Result<Slot[]> }>();

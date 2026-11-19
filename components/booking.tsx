@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarDays, Check, ChevronLeft, ChevronRight, CircleCheck, Clock3, Scissors, UserRound } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, CircleCheck, Clock3, Scissors, UserRound } from "lucide-react";
 import Link from "next/link";
 import { submitBooking } from "@/app/actions";
 import { changeDemo, useDemo } from "@/lib/demo-store";
@@ -16,6 +16,10 @@ import { useSlots } from "./use-slots";
 
 const steps = ["Serviço", "Profissional", "Data e horário", "Identificação"];
 
+/**
+ * Seleciona a origem do catálogo e aguarda a hidratação da demonstração quando necessário.
+ * @param props - Catálogo conectado opcional e identificador de serviço pré-selecionado.
+ */
 export function Booking({ liveCatalog, initialService }: { liveCatalog?: Catalog; initialService?: string }) {
   const local = useDemo();
   const catalog = liveCatalog ?? local;
@@ -23,6 +27,9 @@ export function Booking({ liveCatalog, initialService }: { liveCatalog?: Catalog
   return <BookingFlow catalog={catalog} initialService={initialService} demo={liveCatalog ? null : local} />;
 }
 
+/**
+ * Mantém o estado das etapas até a confirmação. Uma falha de competência ou disponibilidade devolve o usuário à seleção, preservando a identificação digitada.
+ */
 function BookingFlow({ catalog, demo, initialService }: { catalog: Catalog; demo: Workspace | null; initialService?: string }) {
   const { business } = catalog;
   const zone = business.timezone;
@@ -41,6 +48,7 @@ function BookingFlow({ catalog, demo, initialService }: { catalog: Catalog; demo
     resolver: zodResolver(contactSchema),
     defaultValues: demo ? { name: demoContacts[0].name, email: demoContacts[0].email, phone: demoContacts[0].phone } : { name: "", email: "", phone: "" },
   });
+  const email = useWatch({ control: form.control, name: "email" });
   const people = catalog.professionals.filter((person) => person.active &&
     catalog.professional_services.some((entry) => entry.professional_id === person.id && entry.service_id === serviceId));
   const professional = people.find((person) => person.id === professionalId);
@@ -124,7 +132,7 @@ function BookingFlow({ catalog, demo, initialService }: { catalog: Catalog; demo
         </>}
         {step === 3 && <form id="booking-contact" className="field-stack" onSubmit={form.handleSubmit(confirm)} noValidate>
           {demo ? <><p className="muted">Escolha um perfil fictício para concluir a demonstração.</p>
-            <label>Perfil fictício<select value={form.watch("email")} onChange={(event) => {
+            <label>Perfil fictício<select value={email} onChange={(event) => {
               const profile = demoContacts.find((entry) => entry.email === event.target.value);
               if (profile) form.reset({ name: profile.name, email: profile.email, phone: profile.phone });
             }}>{demoContacts.map((entry) => <option key={entry.id} value={entry.email}>{entry.name}</option>)}</select></label>
