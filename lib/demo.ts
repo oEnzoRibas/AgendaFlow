@@ -19,6 +19,11 @@ export const demoContacts: Client[] = ["Camila Duarte", "Rafa Santos", "Marina C
 const competencies = [[0, 1], [1, 2], [3]];
 const buffer = 15;
 
+/**
+ * Gera um workspace sintético relativo ao dia em São Paulo.
+ * @param now - Relógio que define o dia-base e o status dos atendimentos.
+ * @returns Catálogo, agenda e expediente fictícios, prontos para a simulação.
+ */
 export function makeDemo(now = new Date()): Workspace {
   const today = dayIn(now, defaultZone);
   const hours = [1, 2, 3, 4, 5, 6].map((weekday) => ({ weekday, opens_at: "09:00", closes_at: weekday === 6 ? "16:00" : "18:00" }));
@@ -56,6 +61,13 @@ export function makeDemo(now = new Date()): Workspace {
   };
 }
 
+/**
+ * Revalida o horário contra o snapshot atual e associa um perfil fictício.
+ * @param data - Workspace demonstrativo antes da operação.
+ * @param input - Seleção e contato já validados pelo schema de reserva.
+ * @param now - Referência para aplicar o limite de tempo.
+ * @returns Novo workspace e reserva, ou uma falha de domínio. A persistência ocorre no store.
+ */
 export function simulateBooking(data: Workspace, input: BookingInput, now = new Date()): Result<{ data: Workspace; appointment: Appointment }> {
   if (!data.business.public_booking) return { ok: false, error: "O agendamento online está desativado." };
   const client = demoContacts.find((entry) => entry.email === input.contact.email);
@@ -73,6 +85,13 @@ function save<T extends { id: string }>(entries: T[], next: T) {
   return entries.some((entry) => entry.id === next.id) ? entries.map((entry) => entry.id === next.id ? next : entry) : [...entries, next];
 }
 
+/**
+ * Aplica um comando validado ao workspace fictício.
+ * @param data - Snapshot atual do navegador.
+ * @param command - Mutação administrativa discriminada pelo campo action.
+ * @param now - Referência para bloqueios e agendamentos.
+ * @returns O novo estado; em caso de conflito ou entrada inválida, preserva o snapshot anterior.
+ */
 export function simulateManagement(data: Workspace, command: Manage, now = new Date()): Result<Workspace> {
   const ok = (value: Workspace): Result<Workspace> => ({ ok: true, value });
   const fail = (error: string): Result<Workspace> => ({ ok: false, error });

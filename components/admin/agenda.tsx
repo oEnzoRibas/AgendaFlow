@@ -10,6 +10,10 @@ import { Dialog } from "../ui/dialog";
 import { useSlots } from "../use-slots";
 import type { Save } from "./workspace";
 
+/**
+ * Agrupa atendimentos por data civil no fuso do salão e aplica os filtros do painel.
+ * @param props - Workspace, função de mutação, modo e referência opcional para abrir detalhes.
+ */
 export function Agenda({ data, save, demo, initialDay, initialBooking }: {
   data: Workspace; save: Save; demo: boolean; initialDay?: string; initialBooking?: string;
 }) {
@@ -75,7 +79,8 @@ function Details({ appointment, data, demo, save, close }: {
 }) {
   const zone = data.business.timezone;
   const [operation, setOperation] = useState<"details" | "reschedule" | "cancelled">("details");
-  const today = dayIn(new Date(), zone);
+  const now = new Date();
+  const today = dayIn(now, zone);
   const bookedDay = dayIn(appointment.starts_at, zone);
   const [day, setDay] = useState(bookedDay < today ? today : bookedDay);
   const [slot, setSlot] = useState("");
@@ -124,7 +129,7 @@ function Details({ appointment, data, demo, save, close }: {
         <Button variant="danger" onClick={() => submit("cancelled")} disabled={pending}>{pending ? "Cancelando…" : "Confirmar cancelamento"}</Button></div></>}
     {operation === "details" && appointment.status === "confirmed" && <div className="action-row dialog-actions">
       <Button variant="outline" disabled={pending} onClick={() => { setError(""); setOperation("reschedule"); }}>Remarcar</Button>
-      {Date.parse(appointment.starts_at) <= Date.now() && <Button variant="outline" disabled={pending} onClick={() => submit("completed")}>Marcar como concluído</Button>}
+      {Date.parse(appointment.starts_at) <= +now && <Button variant="outline" disabled={pending} onClick={() => submit("completed")}>Marcar como concluído</Button>}
       <Button variant="danger" disabled={pending} onClick={() => { setError(""); setOperation("cancelled"); }}>Cancelar agendamento</Button>
     </div>}
   </Dialog>;

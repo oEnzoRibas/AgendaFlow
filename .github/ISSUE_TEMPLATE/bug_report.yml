@@ -1,0 +1,27 @@
+name: Relatar problema
+description: Informe um problema reproduzível no AgendaFlow
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: "Use dados fictícios. Para vulnerabilidades, siga SECURITY.md."
+  - type: input
+    id: environment
+    attributes:
+      label: Ambiente
+      description: "Commit ou versão, Node.js, navegador e modo de execução."
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Passos para reproduzir
+      description: "Inclua a rota e a sequência de ações."
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Resultado observado e esperado
+    validations:
+      required: true

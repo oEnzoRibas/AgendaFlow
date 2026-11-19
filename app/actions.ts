@@ -19,6 +19,12 @@ function problem(code: string) {
   return messages[code] || "Não foi possível concluir. Tente novamente.";
 }
 
+/**
+ * Consulta a disponibilidade publicada no Supabase. Somente o proprietário pode excluir a própria reserva para remarcar.
+ * @param input - Consulta não confiável, validada por slotQuery.
+ * @param administrative - Usa a sessão administrativa e exige vínculo com o estabelecimento.
+ * @returns Vagas ou erro de domínio para apresentar no seletor.
+ */
 export async function listSlots(input: unknown, administrative = false): Promise<Result<Slot[]>> {
   const parsed = slotQuery.safeParse(input);
   if (!parsed.success || (!administrative && parsed.data.ignoreId)) return { ok: false, error: "Selecione um serviço, profissional e data." };
@@ -34,6 +40,11 @@ export async function listSlots(input: unknown, administrative = false): Promise
   return { ok: true, value: data };
 }
 
+/**
+ * Valida a confirmação recebida do portal e chama a reserva transacional no PostgreSQL.
+ * @param input - Serviço, profissional, instante e contato ainda não validados.
+ * @returns Resumo da reserva ou erro acionável; a operação pode perder a vaga para outra transação.
+ */
 export async function submitBooking(input: unknown): Promise<Result<Confirmation>> {
   const parsed = bookingSchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: parsed.error.issues[0].message };
@@ -49,6 +60,12 @@ export async function submitBooking(input: unknown): Promise<Result<Confirmation
   return { ok: true, value: data };
 }
 
+/**
+ * Envia um comando validado ao banco após verificar sessão e escopo do proprietário.
+ * @param input - Comando não confiável recebido do painel.
+ * @param section - Seção candidata a revalidação após sucesso.
+ * @returns Estado da mutação. A RPC verifica novamente o vínculo antes da escrita.
+ */
 export async function manage(input: unknown, section: string): Promise<Result> {
   const parsed = manageSchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: parsed.error.issues[0].message };
@@ -62,6 +79,12 @@ export async function manage(input: unknown, section: string): Promise<Result> {
   return { ok: true, value: null };
 }
 
+/**
+ * Autentica o formulário por e-mail e senha e permite ao Supabase SSR gravar os cookies.
+ * @param _ - Estado anterior da mensagem, mantido pela interface de useActionState.
+ * @param form - Dados do formulário de login.
+ * @returns Mensagem em caso de falha. No sucesso, o Next.js redireciona para o painel.
+ */
 export async function signIn(_: string | null, form: FormData) {
   const parsed = z.object({ email: z.email().max(254), password: z.string().min(1).max(1024) })
     .safeParse({ email: form.get("email"), password: form.get("password") });
@@ -73,6 +96,9 @@ export async function signIn(_: string | null, form: FormData) {
   redirect("/admin/painel");
 }
 
+/**
+ * Encerra a sessão local do Supabase e redireciona para o login.
+ */
 export async function signOut() {
   const db = await sessionClient();
   await db?.auth.signOut({ scope: "local" });

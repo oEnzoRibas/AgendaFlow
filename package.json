@@ -8,7 +8,8 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
-    "test:integration": "tsx --test tests/supabase.integration.ts"
+    "test:integration": "tsx --test tests/supabase.integration.ts",
+    "lint": "eslint ."
   },
   "engines": {
     "node": ">=22"
@@ -37,7 +38,17 @@
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.4.6",
     "tsx": "^4.23.15",
     "typescript": "^5.9.3"
+  },
+  "author": {
+    "name": "oEnzoRibas",
+    "url": "https://github.com/oEnzoRibas"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oEnzoRibas/AgendaFlow.git"
   }
 }
