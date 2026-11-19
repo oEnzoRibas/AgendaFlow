@@ -9,7 +9,13 @@ O AgendaFlow organiza os agendamentos de pequenos negócios. Clientes escolhem s
 
 O **Studio Bloom** é o salão fictício da demonstração. O fluxo local pode ser explorado sem conta e sem Supabase. O modo conectado usa Supabase Auth e PostgreSQL.
 
-![Página inicial do AgendaFlow em desktop](docs/screenshots/inicio-desktop.jpg)
+## Demonstração da Plataforma
+
+No Studio Bloom, Helena Dias escolhe um corte, consulta os horários de Lia Martins e confirma sua reserva. A equipe abre o mesmo atendimento na agenda e consulta os indicadores do salão. Os dados exibidos são fictícios.
+
+[![Do catálogo do Studio Bloom à confirmação de um corte e à consulta da reserva na agenda da equipe](docs/media/demo-preview.webp)](docs/media/demo.mp4)
+
+[Assistir à demonstração completa em MP4](docs/media/demo.mp4) · 37 segundos · 720p · sem áudio
 
 ## Funcionalidades
 
@@ -19,7 +25,7 @@ O **Studio Bloom** é o salão fictício da demonstração. O fluxo local pode s
 - Disponibilidade calculada no fuso do estabelecimento. A reserva conectada é revalidada em transação e o banco impede sobreposições por profissional.
 - Demonstração isolada no navegador, com dados fictícios, renovação diária e reinício manual.
 
-## Demonstração visual
+## Capturas de tela
 
 | Painel em desktop | Horários no celular |
 | --- | --- |
