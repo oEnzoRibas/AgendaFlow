@@ -13,6 +13,9 @@ export const contactSchema = z.object({
     .refine((phone) => /^\d{10,15}$/.test(phone.replace(/\D/g, "")), "Informe de 10 a 15 dígitos."),
 });
 export const slotQuery = z.object({ day: dayKey, serviceId: identity, professionalId: identity, ignoreId: identity.optional() });
+/**
+ * Contrato da confirmação de reserva. A criação exige instante com offset e dados de contato; UUID e vínculo ainda são verificados contra a disponibilidade.
+ */
 export const bookingSchema = slotQuery.omit({ day: true, ignoreId: true }).extend({
   startsAt: instant,
   contact: contactSchema,
@@ -25,6 +28,9 @@ export const hoursSchema = z.array(z.object({
   .max(7).refine((hours) => new Set(hours.map((entry) => entry.weekday)).size === hours.length);
 
 const editableId = identity.optional();
+/**
+ * Comandos autorizáveis do painel, discriminados pela operação. O schema é reutilizado na demonstração e na ação conectada.
+ */
 export const manageSchema = z.discriminatedUnion("action", [
   z.object({ action: z.literal("client"), data: contactSchema.extend({ id: editableId }) }),
   z.object({ action: z.literal("service"), data: z.object({
@@ -69,6 +75,9 @@ export type Slot = { starts_at: string; ends_at: string; busy_until: string; pri
 export type Status = "confirmed" | "completed" | "cancelled";
 export type Appointment = Slot & { id: string; professional_id: string; service_id: string; client_id: string; status: Status };
 export type Catalog = { business: Business; services: Service[]; professionals: Professional[]; professional_services: Assignment[] };
+/**
+ * Modelo entregue às telas do painel, montado pelo Supabase ou pelo gerador de demonstração.
+ */
 export type Workspace = Catalog & { clients: Client[]; appointments: Appointment[]; availability_rules: Rule[]; blocked_periods: Block[] };
 export type Confirmation = Pick<Appointment, "id" | "starts_at" | "ends_at" | "price_cents">;
 export type Result<T = null> = { ok: true; value: T } | { ok: false; error: string };

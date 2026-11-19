@@ -9,6 +9,10 @@ import { money } from "@/lib/schedule";
 import { Brand } from "./shared";
 import { Button } from "./ui/button";
 
+/**
+ * Apresenta o catálogo público e acompanha alterações locais no modo demonstrativo.
+ * @param props - Catálogo inicial, modo de funcionamento e indicador de falha de carregamento.
+ */
 export function Studio({ initial, live, failed }: { initial: Catalog | null; live: boolean; failed: boolean }) {
   const demo = useDemo();
   const catalog = (live ? initial : demo ?? initial);

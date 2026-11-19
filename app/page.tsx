@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CalendarDays, CalendarRange, ChartNoAxesCombined, Clock3, Globe2, LayoutDashboard, Scissors, UsersRound } from "lucide-react";
+import { CalendarDays, CalendarRange, ChartNoAxesCombined, Clock3, Globe2, LayoutDashboard, Scissors } from "lucide-react";
 import { Brand } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 
@@ -61,6 +61,5 @@ export default function Home() {
         <Button asChild><Link href="/agendar"><Scissors size={17} /> Simular agendamento</Link></Button>
       </section>
     </main>
-    <footer className="site-footer"><div className="wrap"><Brand /><span>Plataforma demonstrativa de agendamentos</span><Link href="/demo/clientes"><UsersRound size={16} /> Clientes da demonstração</Link></div></footer>
   </>;
 }

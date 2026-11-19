@@ -162,7 +162,8 @@ export function Professionals({ data, save }: DirectoryProps) {
   const [blocking, setBlocking] = useState<Professional>();
   const [removing, setRemoving] = useState<Block>();
   const zone = data.business.timezone;
-  const upcoming = data.blocked_periods.filter((item) => Date.parse(item.ends_at) > Date.now())
+  const now = new Date();
+  const upcoming = data.blocked_periods.filter((item) => Date.parse(item.ends_at) > +now)
     .sort((first, second) => Date.parse(first.starts_at) - Date.parse(second.starts_at));
   const timestamp = (value: string) => dateLabel(dayIn(value, zone), "dd/MM/yyyy") + " " + timeLabel(value, zone);
   return <>

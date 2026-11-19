@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Booking } from "@/components/booking";
 import { businessSlug } from "@/lib/supabase/config";
 import { publicClient } from "@/lib/supabase/server";
-import type { Catalog } from "@/lib/model";
+
 import Link from "next/link";
 
 export const metadata = { title: "Agendamento online" };

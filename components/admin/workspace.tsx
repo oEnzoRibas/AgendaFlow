@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import {
-  CalendarDays, CalendarRange, ExternalLink, Flower2, LayoutDashboard, LogIn,
+  CalendarRange, ExternalLink, Flower2, LayoutDashboard, LogIn,
   LogOut, RotateCcw, Scissors, Settings2, UserRound, UsersRound,
 } from "lucide-react";
 import { manage, signOut } from "@/app/actions";
@@ -23,6 +23,10 @@ const icons = { painel: LayoutDashboard, agenda: CalendarRange, clientes: UsersR
 
 export type Save = (command: Manage) => Promise<Result>;
 
+/**
+ * Renderiza a seção administrativa e encaminha comandos para a demo ou para o servidor.
+ * @param props - Seção atual, agenda opcional e workspace previamente autorizado no modo conectado.
+ */
 export function WorkspaceView({ liveData, section, initialDay, initialBooking }: {
   liveData?: Workspace; section: Section; initialDay?: string; initialBooking?: string;
 }) {
