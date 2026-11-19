@@ -13,9 +13,9 @@ O **Studio Bloom** é o salão fictício da demonstração. O fluxo local pode s
 
 No Studio Bloom, Helena Dias escolhe um corte, consulta os horários de Lia Martins e confirma sua reserva. A equipe abre o mesmo atendimento na agenda e consulta os indicadores do salão. Os dados exibidos são fictícios.
 
-[![Do catálogo do Studio Bloom à confirmação de um corte e à consulta da reserva na agenda da equipe](docs/media/demo-preview.webp)](docs/media/demo.mp4)
+![Do catálogo do Studio Bloom à confirmação de um corte e à consulta da reserva na agenda da equipe](docs/media/demo-preview.webp)
 
-[Assistir à demonstração completa em MP4](docs/media/demo.mp4) · 37 segundos · 720p · sem áudio
+[Assistir no navegador](https://cdn.jsdelivr.net/gh/oEnzoRibas/AgendaFlow@main/docs/media/demo.mp4) · [Baixar o vídeo completo em MP4](docs/media/demo.mp4?raw=1) · 37 segundos · 720p · sem áudio
 
 ## Funcionalidades
 
